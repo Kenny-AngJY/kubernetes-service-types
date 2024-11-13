@@ -36,7 +36,7 @@ module "eks" {
     Answer: Without the addon, this daemonset will still be created. Pods will still get assigned an IP address.
     */
     vpc-cni = {
-      addon_version = "v1.18.5-eksbuild.1" # major-version.minor-version.patch-version-eksbuild.build-number.
+      addon_version            = "v1.18.5-eksbuild.1" # major-version.minor-version.patch-version-eksbuild.build-number.
       service_account_role_arn = aws_iam_role.vpc_cni_iam_role.arn
       configuration_values = jsonencode(
         {

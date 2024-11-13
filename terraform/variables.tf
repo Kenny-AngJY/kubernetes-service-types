@@ -26,9 +26,9 @@ variable "create_kms_key" {
     Disabled by default as this cluster is just for testing/practice
     purposes."
   EOT
-  
-  type        = bool
-  default     = false
+
+  type    = bool
+  default = false
 }
 
 variable "create_rds" {
@@ -41,7 +41,7 @@ variable "create_rds" {
   Set this to true if you want to try out the service 
   type of ExternalName, as seen in Figure 14 of the article.
   EOT
-  
-  type        = bool
-  default     = false
+
+  type    = bool
+  default = false
 }

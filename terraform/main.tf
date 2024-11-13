@@ -32,5 +32,5 @@ module "rds" {
   password in AWS Secrets Manager or GitLab/GitHub variables, and then have
   the pipeline to refer to these sources for the password.
   */
-  db_password    = "hfdsn768!" 
+  db_password = "hfdsn768!"
 }
