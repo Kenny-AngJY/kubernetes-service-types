@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-external-name-service
+  namespace: default
+spec:
+  type: ExternalName
+  externalName: education.cplvomtbvyst.ap-southeast-1.rds.amazonaws.com
+  # ports:
+  # - port: 3306
+  #   targetPort: 3306
+  #   name: db

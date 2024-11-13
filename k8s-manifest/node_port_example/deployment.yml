@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx:1.26
+        imagePullPolicy: Always
+        name: nginx
+        securityContext:
+          allowPrivilegeEscalation: false
+      dnsPolicy: ClusterFirst
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - image: alpine/curl:8.9.1
+        imagePullPolicy: Always
+        name: frontend-alpine
+        command: 
+          - sleep
+        args:
+          - '3600'
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+      dnsPolicy: ClusterFirst

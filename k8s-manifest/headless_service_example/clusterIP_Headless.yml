@@ -1,0 +1,14 @@
+# If you want to map a Service directly to a specific IP address, consider using headless Services.
+apiVersion: v1
+kind: Service
+metadata:
+  name: headless-cluster-ip
+spec:
+  ports:
+    - name: web
+      port: 80
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: headless-demo
+  clusterIP: None # Headless service

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-node-port
+spec:
+  ports:
+    - port: 8080
+      targetPort: 80
+      protocol: TCP
+      nodePort: 31000 # Optional field (30000-32767)
+  type: NodePort
+  selector:
+    app: nginx
