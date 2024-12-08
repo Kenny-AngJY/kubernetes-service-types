@@ -1,6 +1,6 @@
 module "eks" {
   source                                 = "terraform-aws-modules/eks/aws"
-  version                                = "20.26.0" # Published October 13, 2024
+  version                                = "20.30.0" # Published November 27, 2024
   cluster_name                           = local.cluster_name
   cluster_version                        = "1.31"
   authentication_mode                    = "API"
@@ -8,6 +8,16 @@ module "eks" {
   cloudwatch_log_group_retention_in_days = 30
   create_kms_key                         = var.create_kms_key
   enable_irsa                            = true
+
+  /* -----------------------------------------------------------------------------------
+  Install default unmanaged add-ons, such as aws-cni, kube-proxy, and CoreDNS during cluster creation. 
+  If false, you must manually install desired add-ons (via the console, especially the Amazon VPC CNI add-on), 
+  else even though your worker nodes will join the cluster, it will fail to be ready, showing the error:
+  "container runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:Network plugin returns error: cni plugin not initialized"
+  
+  Changing this value will force a new cluster to be created.
+  ----------------------------------------------------------------------------------- */
+  bootstrap_self_managed_addons = true
 
   cluster_encryption_config = {}
 
@@ -27,7 +37,7 @@ module "eks" {
     https://docs.aws.amazon.com/eks/latest/userguide/managing-vpc-cni.html
     */
     kube-proxy = {
-      addon_version = "v1.31.1-eksbuild.2"
+      addon_version = "v1.31.2-eksbuild.3"
     }
 
     /*
@@ -36,7 +46,7 @@ module "eks" {
     Answer: Without the addon, this daemonset will still be created. Pods will still get assigned an IP address.
     */
     vpc-cni = {
-      addon_version            = "v1.18.5-eksbuild.1" # major-version.minor-version.patch-version-eksbuild.build-number.
+      addon_version            = "v1.19.0-eksbuild.1" # major-version.minor-version.patch-version-eksbuild.build-number.
       service_account_role_arn = aws_iam_role.vpc_cni_iam_role.arn
       configuration_values = jsonencode(
         {
@@ -50,7 +60,7 @@ module "eks" {
       )
     }
     aws-ebs-csi-driver = {
-      addon_version            = "v1.35.0-eksbuild.1"
+      addon_version            = "v1.37.0-eksbuild.1"
       service_account_role_arn = aws_iam_role.amazon_EBS_CSI_iam_role.arn
     }
     # eks-pod-identity-agent = {}
