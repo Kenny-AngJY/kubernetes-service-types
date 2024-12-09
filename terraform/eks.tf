@@ -66,8 +66,18 @@ module "eks" {
     # eks-pod-identity-agent = {}
   }
 
-  vpc_id     = var.create_vpc ? module.vpc[0].vpc_id : var.vpc_id
-  subnet_ids = var.create_vpc ? module.vpc[0].list_of_subnet_ids : var.list_of_subnet_ids
+  vpc_id = var.create_vpc ? module.vpc[0].vpc_id : var.vpc_id
+  /* -----------------------------------------------------------------------------------
+  A list of subnet IDs where the nodes/node groups will be provisioned.
+  If control_plane_subnet_ids is not provided, the EKS cluster control plane (ENIs) will be provisioned in these subnets
+  ----------------------------------------------------------------------------------- */
+  subnet_ids = var.create_vpc ? (var.create_eks_worker_nodes_in_private_subnet ? module.vpc[0].list_of_private_subnet_ids : module.vpc[0].list_of_public_subnet_ids) : var.list_of_subnet_ids
+
+  /* -----------------------------------------------------------------------------------
+  A list of subnet IDs where the EKS Managed ENIs will be provisioned.
+  Used for expanding the pool of subnets used by nodes/node groups without replacing the EKS control plane
+  ----------------------------------------------------------------------------------- */
+  control_plane_subnet_ids = var.create_vpc ? (var.create_eks_worker_nodes_in_private_subnet ? module.vpc[0].list_of_private_subnet_ids : module.vpc[0].list_of_public_subnet_ids) : var.list_of_subnet_ids
 
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {

@@ -1,3 +1,8 @@
+variable "region" {
+  type    = string
+  default = "ap-southeast-1"
+}
+
 variable "create_vpc" {
   description = <<-EOT
   Choose whether to create a new VPC to deploy the EKS cluster in. 
@@ -44,4 +49,15 @@ variable "create_rds" {
 
   type    = bool
   default = false
+}
+
+variable "use_eks_pod_identity_agent" {
+  description = "Use IAM Roles for Service Account (IRSA) by default."
+  type        = bool
+  default     = false
+}
+
+variable "create_eks_worker_nodes_in_private_subnet" {
+  type    = bool
+  default = true
 }
