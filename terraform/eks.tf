@@ -1,13 +1,15 @@
 module "eks" {
   source                                 = "terraform-aws-modules/eks/aws"
   version                                = "20.30.0" # Published November 27, 2024
+  create                                 = true
   cluster_name                           = local.cluster_name
   cluster_version                        = "1.31"
   authentication_mode                    = "API"
-  cluster_endpoint_public_access         = true
+  cluster_endpoint_private_access        = true # Indicates whether or not the Amazon EKS private API server endpoint is enabled
+  cluster_endpoint_public_access         = true # Indicates whether or not the Amazon EKS public API server endpoint is enabled
   cloudwatch_log_group_retention_in_days = 30
   create_kms_key                         = var.create_kms_key
-  enable_irsa                            = true
+  enable_irsa                            = true # Determines whether to create an OpenID Connect Provider for EKS to enable IRSA
 
   /* -----------------------------------------------------------------------------------
   Install default unmanaged add-ons, such as aws-cni, kube-proxy, and CoreDNS during cluster creation. 
