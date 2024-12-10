@@ -1,3 +1,6 @@
+/* -----------------------------------------------------------------------------------
+EKS Amazon EBS CSI add-on
+----------------------------------------------------------------------------------- */
 resource "aws_iam_role" "amazon_EBS_CSI_iam_role" {
   name        = "amazon-ebs-csi-irsa"
   description = "IAM role for Amazon EBS CSI driver add-on"
@@ -29,6 +32,9 @@ resource "aws_iam_role_policy_attachment" "amazon_EBS_CSI_iam_role" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
 }
 
+/* -----------------------------------------------------------------------------------
+VPC CNI
+----------------------------------------------------------------------------------- */
 resource "aws_iam_role" "vpc_cni_iam_role" {
   name        = "vpc-cni-irsa"
   description = "IAM role for VPC-CNI add-on"
