@@ -1,9 +1,9 @@
 module "eks" {
   source                                 = "terraform-aws-modules/eks/aws"
-  version                                = "20.30.0" # Published November 27, 2024
+  version                                = "20.33.0" # Published January 18, 2025
   create                                 = true
   cluster_name                           = local.cluster_name
-  cluster_version                        = "1.31"
+  cluster_version                        = "1.32"
   authentication_mode                    = "API"
   cluster_endpoint_private_access        = true # Indicates whether or not the Amazon EKS private API server endpoint is enabled
   cluster_endpoint_public_access         = true # Indicates whether or not the Amazon EKS public API server endpoint is enabled
@@ -39,7 +39,7 @@ module "eks" {
     https://docs.aws.amazon.com/eks/latest/userguide/managing-vpc-cni.html
     */
     kube-proxy = {
-      addon_version = "v1.31.2-eksbuild.3"
+      addon_version = "v1.31.3-eksbuild.2"
     }
 
     /*
@@ -48,7 +48,7 @@ module "eks" {
     Answer: Without the addon, this daemonset will still be created. Pods will still get assigned an IP address.
     */
     vpc-cni = {
-      addon_version            = "v1.19.0-eksbuild.1" # major-version.minor-version.patch-version-eksbuild.build-number.
+      addon_version            = "v1.19.2-eksbuild.1" # major-version.minor-version.patch-version-eksbuild.build-number.
       service_account_role_arn = aws_iam_role.vpc_cni_iam_role.arn
       configuration_values = jsonencode(
         {
@@ -90,6 +90,18 @@ module "eks" {
     # t3.large: 2 vCPU, 8GiB
 
     # iam_role_additional_policies = ["arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"]
+    update_config = {
+      max_unavailable_percentage = 50
+      # max_unavailable = 2
+    }
+
+    block_device_mappings = [{
+      device_name = "/dev/xvda"
+      ebs = {
+        encrypted   = true
+        volume_type = "gp3"
+      }
+    }]
   }
 
   eks_managed_node_groups = {
