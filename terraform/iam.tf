@@ -11,7 +11,7 @@ resource "aws_iam_role" "amazon_EBS_CSI_iam_role" {
       {
         "Effect" : "Allow",
         "Principal" : {
-          "Federated" : "${module.eks.oidc_provider_arn}"
+          "Federated" : module.eks.oidc_provider_arn
         },
         "Action" : "sts:AssumeRoleWithWebIdentity",
         "Condition" : {
@@ -45,7 +45,7 @@ resource "aws_iam_role" "vpc_cni_iam_role" {
       {
         "Effect" : "Allow",
         "Principal" : {
-          "Federated" : "${module.eks.oidc_provider_arn}"
+          "Federated" : module.eks.oidc_provider_arn
         },
         "Action" : "sts:AssumeRoleWithWebIdentity",
         "Condition" : {
